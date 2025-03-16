@@ -17,6 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -29,16 +30,16 @@ public class Product {
     @Min(value = 0, message = "Points must be worth at least 1!")
     Integer points;
 
-    @NotBlank(message = "Unit type cannot be empty!")
-    String unitType;
-
-    @NotBlank(message = "Membership cannot be empty!")
-    String membership;
-
     @NotBlank(message = "Price cannot be empty!")
     Double price;
 
     @CreationTimestamp
     Timestamp createdAt;
+
+    Integer quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
 }

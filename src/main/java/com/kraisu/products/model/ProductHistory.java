@@ -2,8 +2,11 @@ package com.kraisu.products.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -16,17 +19,23 @@ import java.util.UUID;
 public class ProductHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    UUID id;
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
-    Product product;
+    private Product product;
 
-    String changedField;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private FieldName fieldName;
 
-    String oldValue;
+    @Column(nullable = false)
+    private String oldValue;
 
-    String newValue;
+    @Column(nullable = false)
+    private String newValue;
 
-    Timestamp createdAt;
+    @CreatedDate
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
 }

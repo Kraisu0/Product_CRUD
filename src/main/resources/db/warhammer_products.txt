@@ -1,0 +1,50 @@
+CREATE TABLE categories (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(100) NOT NULL,
+    min_price DOUBLE PRECISION,
+    max_price DOUBLE PRECISION
+);
+
+CREATE TABLE products (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(50) UNIQUE NOT NULL,
+    points INTEGER CHECK (points >= 0),
+    price DOUBLE PRECISION NOT NULL CHECK (price >= 0),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    quantity INTEGER CHECK (quantity >= 0),
+    category_id UUID REFERENCES categories(id) ON DELETE SET NULL
+);
+
+CREATE TABLE product_history (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    field_name VARCHAR(20) NOT NULL CHECK (field_name IN ('NAME', 'POINTS', 'PRICE', 'CATEGORY', 'QUANTITY')),
+    old_value TEXT NOT NULL,
+    new_value TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE block_list (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(100) UNIQUE NOT NULL
+);
+
+INSERT INTO categories (id, name, min_price, max_price) VALUES
+    ('c1b60a6e-29c2-4f6d-8f89-3f089cc6789d', 'infantry', 50, 250),
+    ('f7d50e78-1b91-4a72-b5c9-2d6a71b7b045', 'vehicle', 70, 300),
+    ('be624477-9c5e-44eb-9b73-117fadf92f73', 'Character', 100, 600),
+    ('81b24039-f7a6-41f5-b8c0-7b5c0b54c94d', 'mounted', 90, 250);
+
+INSERT INTO products (id, name, points, category_id, price, quantity, created_at) VALUES
+    ('1409f35b-7efe-4ace-9db1-f4c4de2b96ae', 'Terminator squad', 170, 'c1b60a6e-29c2-4f6d-8f89-3f089cc6789d', 220, 10, '2025-03-11 01:17:41.133456'),
+    ('fab3bdf5-30ad-4a21-a026-2f9eddbf6117', 'Rhino', 75, 'f7d50e78-1b91-4a72-b5c9-2d6a71b7b045', 195, 5, '2025-03-11 01:17:41.133456'),
+    ('10817927-c8d4-49f2-a3cd-50a1489080fb', 'Tactical squad', 170, 'c1b60a6e-29c2-4f6d-8f89-3f089cc6789d', 200, 8, '2025-03-11 01:17:41.133456'),
+    ('b2fbf2fe-86ec-4011-96a3-0f058cb027d2', 'Venerable Dreadnought', 135, 'f7d50e78-1b91-4a72-b5c9-2d6a71b7b045', 210, 6, '2025-03-11 01:17:41.133456'),
+    ('3dffa4b8-a2c3-4135-bdb2-fff5397cf47b', 'Azrael', 115, 'be624477-9c5e-44eb-9b73-117fadf92f73', 155, 3, '2025-03-11 01:17:41.133456'),
+    ('78793123-04d2-4f12-b427-69721a7747b4', 'Ravenwing black knights', 90, '81b24039-f7a6-41f5-b8c0-7b5c0b54c94d', 210, 4, '2025-03-11 01:17:41.133456'),
+    ('b356e7b9-26e3-49b8-b5db-fda22dc2780a', 'Ravenwing Darkshroud', 115, 'f7d50e78-1b91-4a72-b5c9-2d6a71b7b045', 265, 2, '2025-03-11 01:17:41.133456'),
+    ('5b91999a-7005-4105-b664-a50190ca6fb1', 'Eliminator squad', 85, 'c1b60a6e-29c2-4f6d-8f89-3f089cc6789d', 200, 7, '2025-03-11 01:17:41.133456'),
+    ('839286c3-1ad2-4a59-97d1-16abe4a1f54f', 'Lion Eljonson, Primarch', 315, 'be624477-9c5e-44eb-9b73-117fadf92f73', 570, 1, '2025-03-11 01:17:41.133456'),
+    ('087f350d-63cd-4a5c-b373-09c2200249bc', 'Drop pod', 70, 'f7d50e78-1b91-4a72-b5c9-2d6a71b7b045', 190, 5, '2025-03-11 01:17:41.133456');
+
+

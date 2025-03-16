@@ -11,12 +11,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(name = "block_list")
 public class BlockList {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    UUID id;
+    public UUID id;
 
     @Column(unique = true, nullable = false)
-    String name;
+    public String name;
 
 }
